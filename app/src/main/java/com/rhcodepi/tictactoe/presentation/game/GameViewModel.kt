@@ -4,6 +4,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.rhcodepi.tictactoe.presentation.components.BoardCellValue
 import com.rhcodepi.tictactoe.presentation.components.WinningType
 import com.rhcodepi.tictactoe.presentation.input.UserInput
@@ -37,14 +38,18 @@ class GameViewModel : ViewModel()
             is UserInput.BoardInput -> {
                 // add value to board
                 if(!state.isPlayWithAI) addValueToBoard(userInput.cellNo) else playAI(userInput.cellNo)
+
             }
             is UserInput.PlayAgainButtonInput -> {
                 playAgain()
             }
-            UserInput.PlayWithAIButtonInput -> {
+            is UserInput.PlayWithAIButtonInput -> {
                 state = state.copy(
                     isPlayWithAI = true
                 )
+            }
+            UserInput.ReturnToHome -> {
+                resetGameState()
             }
         }
     }
@@ -187,7 +192,6 @@ class GameViewModel : ViewModel()
             }
         }
 
-
         Timer().schedule(1500)
         {
             if(state.aiTurn)
@@ -228,5 +232,28 @@ class GameViewModel : ViewModel()
 
 
 
+    }
+
+    fun goToHome(path: String, navController: NavController)
+    {
+        navController.navigate(path)
+    }
+
+    private fun resetGameState()
+    {
+        state = state.copy(
+            crossPlayerScore = 0,
+            circlePlayerScore = 0,
+            isPlayWithAI = false,
+            aiTurn = false,
+            drawScore = 0,
+            hasWon = false,
+            winningType = WinningType.NONE,
+            cellValue = BoardCellValue.CROSS,
+            cellValueText = "Now Playing : X ",
+        )
+        Timer().schedule(1500){
+            playAgain()
+        }
     }
 }

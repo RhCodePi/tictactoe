@@ -21,8 +21,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.rhcodepi.tictactoe.R
 import com.rhcodepi.tictactoe.presentation.components.BaseBoard
 import com.rhcodepi.tictactoe.presentation.components.BoardCellValue
@@ -53,11 +58,13 @@ import com.rhcodepi.tictactoe.presentation.components.WinRowLine2
 import com.rhcodepi.tictactoe.presentation.components.WinRowLine3
 import com.rhcodepi.tictactoe.presentation.components.WinningType
 import com.rhcodepi.tictactoe.presentation.input.UserInput
+import com.rhcodepi.tictactoe.presentation.navigation.Screen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun GameScreen(
-    viewModel: GameViewModel
+    viewModel: GameViewModel,
+    navController: NavController
 )
 {
     val state = viewModel.state
@@ -78,9 +85,13 @@ fun GameScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { viewModel.onClick(
-                UserInput.PlayWithAIButtonInput
-            ) },
+            onClick = {
+                viewModel.onClick(UserInput.ReturnToHome)
+                viewModel.goToHome(
+                    Screen.Home.route,
+                    navController
+                )
+            },
             modifier = Modifier,
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.button_Green),
@@ -88,7 +99,8 @@ fun GameScreen(
             shape = RoundedCornerShape(15.dp),
 
             ) {
-            Text(text = "Play With AI")
+            Text(text = "")
+            Icon(imageVector = Icons.Default.Home, contentDescription = null)
         }
         Row (
             modifier = Modifier
@@ -144,7 +156,8 @@ fun GameScreen(
                                 .aspectRatio(1f)
                                 .clickable(
                                     interactionSource = MutableInteractionSource(),
-                                    indication = null
+                                    indication = null,
+                                    enabled = !state.aiTurn
                                 ) {
                                     viewModel.onClick(
                                         UserInput.BoardInput(cellNO)
@@ -239,5 +252,8 @@ fun DrawWinningLine(
 @Preview
 fun GameScreenPreview()
 {
-    GameScreen(viewModel = GameViewModel())
+    GameScreen(
+        viewModel = GameViewModel(),
+        navController = rememberNavController()
+    )
 }

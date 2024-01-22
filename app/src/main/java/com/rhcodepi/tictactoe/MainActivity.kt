@@ -11,8 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.rhcodepi.tictactoe.presentation.game.GameScreen
 import com.rhcodepi.tictactoe.presentation.game.GameViewModel
+import com.rhcodepi.tictactoe.presentation.game.HomeViewModel
+import com.rhcodepi.tictactoe.presentation.navigation.SetupNavigationGraph
 import com.rhcodepi.tictactoe.ui.theme.TictactoeTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,8 +24,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             TictactoeTheme {
 
-                val viewModel = viewModel<GameViewModel>()
-                GameScreen(viewModel = viewModel)
+                val homeViewModel = viewModel<HomeViewModel>()
+                val gameViewModel = viewModel<GameViewModel>()
+                val navController = rememberNavController()
+
+                SetupNavigationGraph(
+                    navHostController = navController,
+                    homeViewModel = homeViewModel,
+                    gameViewModel = gameViewModel
+                )
+
             }
         }
     }
