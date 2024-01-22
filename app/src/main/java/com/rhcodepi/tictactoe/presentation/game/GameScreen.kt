@@ -77,6 +77,19 @@ fun GameScreen(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Button(
+            onClick = { viewModel.onClick(
+                UserInput.PlayWithAIButtonInput
+            ) },
+            modifier = Modifier,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.button_Green),
+            ),
+            shape = RoundedCornerShape(15.dp),
+
+            ) {
+            Text(text = "Play With AI")
+        }
         Row (
             modifier = Modifier
                 .fillMaxWidth(),
@@ -97,6 +110,7 @@ fun GameScreen(
                 ) {
                 Text(text = "Play Again")
             }
+
         }
         Box(
             modifier = Modifier

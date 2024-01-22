@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.rhcodepi.tictactoe.presentation.components.BoardCellValue
 import com.rhcodepi.tictactoe.presentation.components.WinningType
 import com.rhcodepi.tictactoe.presentation.input.UserInput
+import java.util.Timer
+import kotlin.concurrent.schedule
+import kotlin.system.exitProcess
 
 class GameViewModel : ViewModel()
 {
@@ -33,10 +36,15 @@ class GameViewModel : ViewModel()
         when(userInput){
             is UserInput.BoardInput -> {
                 // add value to board
-                addValueToBoard(userInput.cellNo)
+                if(!state.isPlayWithAI) addValueToBoard(userInput.cellNo) else playAI(userInput.cellNo)
             }
-            UserInput.PlayAgainButtonInput -> {
+            is UserInput.PlayAgainButtonInput -> {
                 playAgain()
+            }
+            UserInput.PlayWithAIButtonInput -> {
+                state = state.copy(
+                    isPlayWithAI = true
+                )
             }
         }
     }
@@ -146,4 +154,79 @@ class GameViewModel : ViewModel()
     }
     // endregion
 
+    private fun playAI(cellNO: Int)
+    {
+        if(mapBoard[cellNO] != BoardCellValue.NONE)
+            return
+
+        if(state.cellValue == BoardCellValue.CROSS)
+        {
+            mapBoard[cellNO] = BoardCellValue.CROSS
+            if(checkForWinning(BoardCellValue.CROSS))
+            {
+                state = state.copy(
+                    cellValueText = "WIN X",
+                    cellValue = BoardCellValue.NONE,
+                    hasWon = true,
+                    crossPlayerScore = state.crossPlayerScore + 1
+                )
+            }
+            else if (boardIsFull()){
+                state = state.copy(
+                    cellValueText = "Draw",
+                    drawScore = state.drawScore + 1,
+                    hasWon = false
+                )
+            }
+            else{
+                state = state.copy(
+                    cellValueText = "Now Play: O",
+                    aiTurn = true,
+                    cellValue = BoardCellValue.CIRCLE
+                )
+            }
+        }
+
+
+        Timer().schedule(1500)
+        {
+            if(state.aiTurn)
+            {
+                var randomCellValue = (1..9).random()
+                while (mapBoard[randomCellValue] != BoardCellValue.NONE)
+                {
+                    randomCellValue = (1..9).random()
+                }
+                mapBoard[randomCellValue] = BoardCellValue.CIRCLE
+                if(checkForWinning(BoardCellValue.CIRCLE))
+                {
+                    state = state.copy(
+                        cellValueText = "WIN O",
+                        cellValue = BoardCellValue.NONE,
+                        hasWon = true,
+                        crossPlayerScore = state.circlePlayerScore + 1
+                    )
+                }
+                else if(boardIsFull())
+                {
+                    state = state.copy(
+                        cellValueText = "Draw",
+                        drawScore = state.drawScore + 1,
+                        hasWon = false
+                    )
+                }
+                else {
+                    state = state.copy(
+                        cellValueText = "Now Play: X",
+                        aiTurn = false,
+                        cellValue = BoardCellValue.CROSS
+                    )
+                }
+            }
+        }
+
+
+
+
+    }
 }
