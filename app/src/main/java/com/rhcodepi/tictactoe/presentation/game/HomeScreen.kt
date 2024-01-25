@@ -104,9 +104,16 @@ fun HomeScreen(
                 containerColor = colorResource(id = R.color.deep_blue),
             )
         ) {
-            Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = null,
+                tint = Color.White
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Play")
+            Text(
+                text = "Play",
+                color = Color.White,
+            )
         }
         Button(
             onClick = {
@@ -123,9 +130,16 @@ fun HomeScreen(
                 containerColor = colorResource(id = R.color.button_Green),
             )
         ) {
-            Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = null,
+                tint = Color.White
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Play With AI")
+            Text(
+                text = "Play With AI",
+                color = Color.White
+            )
         }
         Button(
             onClick = {
@@ -138,16 +152,23 @@ fun HomeScreen(
                 containerColor = Color.Red,
             )
         ) {
-            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
+            Icon(
+                imageVector = Icons.Default.ExitToApp,
+                contentDescription = null,
+                tint = Color.White
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Exit")
+            Text(
+                text = "Exit",
+                color = Color.White
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun TestPreview() {
+fun HomeScreenPreview() {
     TictactoeTheme {
         HomeScreen(
             navController = rememberNavController(),

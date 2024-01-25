@@ -32,15 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -107,7 +103,10 @@ fun GameScreen(
                 ),
                 shape = RoundedCornerShape(15.dp),
             ) {
-                Text(text = "Play Again")
+                GameScreenText(
+                    text = "Play Again",
+                    fontSize = 12.sp
+                )
             }
 
             Button(
@@ -125,7 +124,11 @@ fun GameScreen(
                 ),
                 shape = RoundedCornerShape(15.dp),
                 ) {
-                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         }
 
@@ -240,16 +243,10 @@ fun GameScreenText(
         text = text,
         fontWeight = FontWeight.Bold,
         fontSize = fontSize,
-        color = Color.White,
-        overflow = TextOverflow.Visible,
+        color = Color.Black,
         fontStyle = FontStyle.Italic,
-        style = TextStyle(
-            shadow = Shadow(
-                color = Color.Black,
-                offset = Offset(x = 5.2f, y = 5.2f)
-            ),
-            textMotion =  TextMotion.Animated
-        )
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1
     )
 }
 
