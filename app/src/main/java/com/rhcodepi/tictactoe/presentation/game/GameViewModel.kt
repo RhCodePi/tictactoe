@@ -10,7 +10,6 @@ import com.rhcodepi.tictactoe.presentation.components.WinningType
 import com.rhcodepi.tictactoe.presentation.input.UserInput
 import java.util.Timer
 import kotlin.concurrent.schedule
-import kotlin.system.exitProcess
 
 class GameViewModel : ViewModel()
 {
@@ -38,7 +37,6 @@ class GameViewModel : ViewModel()
             is UserInput.BoardInput -> {
                 // add value to board
                 if(!state.isPlayWithAI) addValueToBoard(userInput.cellNo) else playAI(userInput.cellNo)
-
             }
             is UserInput.PlayAgainButtonInput -> {
                 playAgain()
@@ -55,7 +53,7 @@ class GameViewModel : ViewModel()
     }
     // endregion
 
-    // region Input Add Value to Map
+    // region Input Add Value to Map, Play With Friends
     // for adding value the map object and checking who is winning
     private fun addValueToBoard(cellNO : Int)
     {
@@ -81,7 +79,14 @@ class GameViewModel : ViewModel()
                 state = state.copy(
                     cellValueText = "Now Playing : O",
                     cellValue = BoardCellValue.CIRCLE,
+                    changeTurn = true
                 )
+                Timer().schedule(1000)
+                {
+                    state = state.copy(
+                        changeTurn = false
+                    )
+                }
             }
 
         } // check cross player for have been won
@@ -104,8 +109,15 @@ class GameViewModel : ViewModel()
             } else {
                 state = state.copy(
                     cellValue = BoardCellValue.CROSS,
-                    cellValueText = "Now Playing : X"
+                    cellValueText = "Now Playing : X",
+                    changeTurn = true
                 )
+                Timer().schedule(1000)
+                {
+                    state = state.copy(
+                        changeTurn = false
+                    )
+                }
             }
         } // check circle player for have been won
     }
@@ -131,7 +143,7 @@ class GameViewModel : ViewModel()
     private fun boardIsFull() : Boolean
     {
         if(mapBoard.containsValue(BoardCellValue.NONE)) return false
-        return true;
+        return true
     }
     // endregion
 
@@ -159,6 +171,7 @@ class GameViewModel : ViewModel()
     }
     // endregion
 
+    //region Play With AI
     private fun playAI(cellNO: Int)
     {
         if(mapBoard[cellNO] != BoardCellValue.NONE)
@@ -186,7 +199,7 @@ class GameViewModel : ViewModel()
             else{
                 state = state.copy(
                     cellValueText = "Now Play: O",
-                    aiTurn = true,
+                    changeTurn = true,
                     cellValue = BoardCellValue.CIRCLE
                 )
             }
@@ -194,7 +207,7 @@ class GameViewModel : ViewModel()
 
         Timer().schedule(1500)
         {
-            if(state.aiTurn)
+            if(state.changeTurn)
             {
                 var randomCellValue = (1..9).random()
                 while (mapBoard[randomCellValue] != BoardCellValue.NONE)
@@ -208,7 +221,8 @@ class GameViewModel : ViewModel()
                         cellValueText = "WIN O",
                         cellValue = BoardCellValue.NONE,
                         hasWon = true,
-                        crossPlayerScore = state.circlePlayerScore + 1
+                        circlePlayerScore = state.circlePlayerScore + 1,
+                        changeTurn = false
                     )
                 }
                 else if(boardIsFull())
@@ -222,30 +236,29 @@ class GameViewModel : ViewModel()
                 else {
                     state = state.copy(
                         cellValueText = "Now Play: X",
-                        aiTurn = false,
+                        changeTurn = false,
                         cellValue = BoardCellValue.CROSS
                     )
                 }
             }
         }
-
-
-
-
     }
+    //endregion
 
+    // back to home in game screen
     fun goToHome(path: String, navController: NavController)
     {
         navController.navigate(path)
     }
 
+    // reset game
     private fun resetGameState()
     {
         state = state.copy(
             crossPlayerScore = 0,
             circlePlayerScore = 0,
             isPlayWithAI = false,
-            aiTurn = false,
+            changeTurn = false,
             drawScore = 0,
             hasWon = false,
             winningType = WinningType.NONE,

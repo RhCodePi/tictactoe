@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,8 +53,8 @@ fun HomeScreen(
 
     val animVisiblity = remember { MutableTransitionState(false) }
         .apply {
-            targetState = true }
-
+            targetState = true
+        }
 
     Column(
         modifier = Modifier
@@ -79,7 +79,6 @@ fun HomeScreen(
             color = Color.White,
             fontFamily = FontFamily.Cursive,
             textAlign = TextAlign.Center,
-
         )
         AnimatedVisibility(
             visibleState = animVisiblity,
@@ -100,7 +99,10 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(horizontal = 120.dp)
                 .fillMaxWidth(),
-            shape = RoundedCornerShape(15.dp)
+            shape = RoundedCornerShape(15.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.deep_blue),
+            )
         ) {
             Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
@@ -116,27 +118,30 @@ fun HomeScreen(
             },
             modifier = Modifier
                 .padding(horizontal = 100.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.button_Green),
+            )
         ) {
             Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Play With AI")
-
         }
-
         Button(
             onClick = {
                 homeViewModel.exitGame(activity)
             },
             modifier = Modifier
                 .padding(horizontal = 120.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Red,
+            )
         ) {
             Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Exit")
         }
-
     }
 }
 

@@ -32,13 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -60,7 +65,6 @@ import com.rhcodepi.tictactoe.presentation.components.WinningType
 import com.rhcodepi.tictactoe.presentation.input.UserInput
 import com.rhcodepi.tictactoe.presentation.navigation.Screen
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun GameScreen(
     viewModel: GameViewModel,
@@ -84,45 +88,57 @@ fun GameScreen(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = {
-                viewModel.onClick(UserInput.ReturnToHome)
-                viewModel.goToHome(
-                    Screen.Home.route,
-                    navController
-                )
-            },
-            modifier = Modifier,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.button_Green),
-            ),
-            shape = RoundedCornerShape(15.dp),
-
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = { viewModel.onClick(
+                    UserInput.PlayAgainButtonInput
+                ) },
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(horizontal = 15.dp)
+                ,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.button_Green),
+                ),
+                shape = RoundedCornerShape(15.dp),
             ) {
-            Text(text = "")
-            Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                Text(text = "Play Again")
+            }
+
+            Button(
+                onClick = {
+                    viewModel.onClick(UserInput.ReturnToHome)
+                    viewModel.goToHome(
+                        Screen.Home.route,
+                        navController
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.5f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.button_Green),
+                ),
+                shape = RoundedCornerShape(15.dp),
+                ) {
+                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+            }
         }
+
         Row (
             modifier = Modifier
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
         ){
-            TopBarText(text = state.cellValueText)
-            Button(
-                onClick = { viewModel.onClick(
-                    UserInput.PlayAgainButtonInput
-                ) },
-                modifier = Modifier,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.button_Green),
-                ),
-                shape = RoundedCornerShape(15.dp),
-
-                ) {
-                Text(text = "Play Again")
-            }
-
+            GameScreenText(
+                text = state.cellValueText,
+                fontSize = 22.sp
+            )
         }
         Box(
             modifier = Modifier
@@ -157,7 +173,7 @@ fun GameScreen(
                                 .clickable(
                                     interactionSource = MutableInteractionSource(),
                                     indication = null,
-                                    enabled = !state.aiTurn
+                                    enabled = !state.changeTurn
                                 ) {
                                     viewModel.onClick(
                                         UserInput.BoardInput(cellNO)
@@ -203,18 +219,19 @@ fun GameScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ){
-            TopBarText(text = "Score X: ${state.crossPlayerScore}")
-            TopBarText(text = "Score O: ${state.circlePlayerScore}")
-            TopBarText(text = "Draw Score : ${state.drawScore}")
+            GameScreenText(text = "Score X: ${state.crossPlayerScore}")
+            GameScreenText(text = "Score O: ${state.circlePlayerScore}")
+            GameScreenText(text = "Draw Score : ${state.drawScore}")
         }
 
     }
 }
 
 @Composable
-fun TopBarText(
+fun GameScreenText(
     modifier: Modifier = Modifier,
     text: String,
+    fontSize: TextUnit = 16.sp
 )
 {
     Text(
@@ -222,9 +239,17 @@ fun TopBarText(
             .padding(4.dp),
         text = text,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp,
+        fontSize = fontSize,
         color = Color.White,
-        overflow = TextOverflow.Visible
+        overflow = TextOverflow.Visible,
+        fontStyle = FontStyle.Italic,
+        style = TextStyle(
+            shadow = Shadow(
+                color = Color.Black,
+                offset = Offset(x = 5.2f, y = 5.2f)
+            ),
+            textMotion =  TextMotion.Animated
+        )
     )
 }
 

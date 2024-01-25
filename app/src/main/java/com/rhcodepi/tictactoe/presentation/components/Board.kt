@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BaseBoard()
 {
-    // this canvas for drawing base board for tictactoe
+    // this canvas for drawing base board for tic tac toe
     Canvas(
         modifier = Modifier
             .size(300.dp)
@@ -56,7 +55,6 @@ fun BaseBoard()
         )
 
     }
-
 }
 // endregion
 
@@ -112,8 +110,8 @@ fun WinColumnLine1()
             color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
-            start = Offset(x= size.width / 6, y = 0f),
-            end = Offset(x= size.width / 6, y = size.height),
+            start = Offset(x= size.width *1.1f/ 6, y = 0f),
+            end = Offset(x= size.width *1.1f / 6, y = size.height),
         )
     }
 }
@@ -145,8 +143,8 @@ fun WinColumnLine3()
             color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
-            start = Offset(x= size.width * 5/ 6, y = 0f),
-            end = Offset(x= size.width * 5/ 6, y = size.height),
+            start = Offset(x= size.width * 4.9f/ 6, y = 0f),
+            end = Offset(x= size.width * 4.9f/ 6, y = size.height),
         )
     }
 }
@@ -162,8 +160,8 @@ fun WinRowLine1()
             color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
-            start = Offset(x= 0f, y = size.height/ 6),
-            end = Offset(x= size.width, y = size.height / 6),
+            start = Offset(x= 0f, y = size.height * 1.1f/ 6),
+            end = Offset(x= size.width, y = size.height * 1.1f/ 6),
         )
     }
 }
@@ -191,12 +189,11 @@ fun WinRowLine3()
     Canvas(modifier = Modifier.size(300.dp))
     {
         drawLine(
-            color = Color.Green
-            ,
+            color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
-            start = Offset(x= 0f, y = size.height * 5/ 6),
-            end = Offset(x= size.width, y = size.height *5/ 6),
+            start = Offset(x= 0f, y = size.height * 4.9f/ 6),
+            end = Offset(x= size.width, y = size.height * 4.9f/ 6),
         )
     }
 }
@@ -207,8 +204,7 @@ fun WinDiagonalLeftLine()
     Canvas(modifier = Modifier.size(300.dp))
     {
         drawLine(
-            color = Color.Green
-            ,
+            color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
             start = Offset(x= 0f, y = 0f),
@@ -223,8 +219,7 @@ fun WinDiagonalRightLine()
     Canvas(modifier = Modifier.size(300.dp))
     {
         drawLine(
-            color = Color.Green
-            ,
+            color = Color.Green,
             strokeWidth = 10f,
             cap = StrokeCap.Round,
             start = Offset(x= size.width, y = 0f),
